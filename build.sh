@@ -78,7 +78,7 @@ sudo rm -rf rootfs/dev/*
 sudo rm -rf rootfs/run/*
 sudo rm -rf rootfs/sys/*
 
-sudo tar -zcf postchrrot-rootfs.tar.gz rootfs
+sudo tar -zcf postchroot-rootfs.tar.gz rootfs
 }
 
 setup
