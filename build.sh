@@ -1,14 +1,5 @@
 #!/bin/bash
 
-function setup {
-	rm -rf server-*
-	rm -rf desktop-*
-	rm -rf rootfs*
-
-	wget http://opensource.nextthing.co/chippian/rootfs/desktop-rootfs.tar.gz
-	tar -xf desktop-rootfs.tar.gz
-}
-
 function build_debian_post_chroot {
 
 	sudo mount -t proc	chproc	rootfs/proc
@@ -81,6 +72,5 @@ sudo rm -rf rootfs/sys/*
 sudo tar -zcf postchroot-rootfs.tar.gz rootfs
 }
 
-setup
 build_debian_post_chroot || exit $?
 
