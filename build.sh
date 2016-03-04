@@ -64,10 +64,10 @@ VARIANT_ID=derp\n" |sudo tee rootfs/etc/os-release
 
 sudo chown -R $USER:$USER *
 
-sudo rm -rf rootfs/proc/*
-sudo rm -rf rootfs/dev/*
-sudo rm -rf rootfs/run/*
-sudo rm -rf rootfs/sys/*
+#sudo rm -rf rootfs/proc/*
+#sudo rm -rf rootfs/dev/*
+#sudo rm -rf rootfs/run/*
+#sudo rm -rf rootfs/sys/*
 
 sudo tar -zcf postchroot-rootfs.tar.gz rootfs
 }
