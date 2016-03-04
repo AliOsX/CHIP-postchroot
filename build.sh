@@ -62,7 +62,7 @@ BUILD_ID=${BUILD}\n\
 VARIANT=\"Debian on C.H.I.P\"\n\
 VARIANT_ID=derp\n" |sudo tee rootfs/etc/os-release
 
-sudo chown -R $USER:$USER *
+#sudo chown -R $USER:$USER *
 
 #sudo rm -rf rootfs/proc/*
 #sudo rm -rf rootfs/dev/*
