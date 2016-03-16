@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 function build_debian_post_chroot {
 
 	sudo mount -t proc	chproc	rootfs/proc
