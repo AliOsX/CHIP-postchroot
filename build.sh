@@ -60,9 +60,9 @@ mv -f /etc/rc.local.orig /etc/rc.local\n" |sudo tee rootfs/etc/rc.local >/dev/nu
   echo -e "Debian on C.H.I.P ${BRANCH} build ${BUILD} rev ${GITHASH}\n" |sudo tee rootfs/etc/chip_build_info.txt
 
 echo -e "$(cat rootfs/etc/os-release)\n\
-BUILD_ID=${BUILD}\n\
+BUILD_ID=$(date)\n\
 VARIANT=\"Debian on C.H.I.P\"\n\
-VARIANT_ID=derp\n" |sudo tee rootfs/etc/os-release
+VARIANT_ID=$(cat rootfs/etc/os-variant)\n" |sudo tee rootfs/etc/os-release
 
 #sudo chown -R $USER:$USER *
 
