@@ -9,6 +9,13 @@ function build_debian_post_chroot {
 echo -e "chip\nchip\n\n\n\n\n\nY\n" | adduser chip
 adduser chip sudo
 
+##hacks for pocketchip gtk file dialog size
+chown -R /home/chip/.config/gtk-2.0
+chmod 655 /home/chip/.config/gtk-2.0
+chmod 644 /home/chip/.config/gtk-2.0/*
+##endhacks
+
+
 apt-get clean
 apt-get autoclean
 apt-get autoremove
