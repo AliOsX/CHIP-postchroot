@@ -10,6 +10,8 @@ echo -e "chip\nchip\n\n\n\n\n\nY\n" | adduser chip
 adduser chip sudo
 
 ##hacks for pocketchip gtk file dialog size
+mkdir -p /home/chip/.config
+cp -R /etc/skel/.config/gtk-2.0 /home/chip/.config/
 chown -R root:root /home/chip/.config/gtk-2.0
 chmod 655 /home/chip/.config/gtk-2.0
 chmod 644 /home/chip/.config/gtk-2.0/*
