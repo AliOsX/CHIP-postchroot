@@ -7,7 +7,8 @@ function build_debian_post_chroot {
 
 	sudo chroot rootfs /bin/bash <<EOF
 echo -e "chip\nchip\n\n\n\n\n\nY\n" | adduser chip
-adduser chip sudo i2c
+adduser chip sudo 
+adduser chip i2c
 
 ##hacks for pocketchip gtk file dialog size
 mkdir -p /home/chip/.config
