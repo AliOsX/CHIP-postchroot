@@ -25,6 +25,12 @@ apt-get autoremove
 
 rm -rf /var/lib/apt/lists/*
 rm -rf /usr/lib/locale/*
+systemctl disable systemd-journal-flush
+systemctl mask systemd-journal-flush
+systemctl disable ModemManager
+systemctl mask ModemManager
+systemctl disable hostapd
+systemctl mask hostapd
 EOF
   sync
   sleep 3
