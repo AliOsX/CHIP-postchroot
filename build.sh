@@ -22,7 +22,6 @@ chmod 644 /home/chip/.config/gtk-2.0/*
 apt-get clean
 apt-get autoclean
 apt-get autoremove
-apt-get install plymouth
 
 rm -rf /var/lib/apt/lists/*
 rm -rf /usr/lib/locale/*
