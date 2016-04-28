@@ -22,6 +22,7 @@ chmod 644 /home/chip/.config/gtk-2.0/*
 apt-get clean
 apt-get autoclean
 apt-get autoremove
+apt-get install plymouth
 
 rm -rf /var/lib/apt/lists/*
 rm -rf /usr/lib/locale/*
@@ -64,6 +65,8 @@ mv -f /etc/rc.local.orig /etc/rc.local\n" |sudo tee rootfs/etc/rc.local >/dev/nu
 	sudo sed -i -e 's/#SystemKeepFree=.*/SystemKeepFree=5M/' rootfs/etc/systemd/journald.conf
 	sudo sed -i -e 's/#RuntimeMaxUse=.*/RuntimeMaxUse=10M/' rootfs/etc/systemd/journald.conf
 	sudo sed -i -e 's/#RuntimeKeepFree=.*/RuntimeKeepFree=5M/' rootfs/etc/systemd/journald.conf
+	sudo sed -i -e 's/#Theme==.*/Theme==tribar/' rootfs/etc/plymouth/plymouthd.conf
+	sudo sed -i '/_initrd="$2"/a echo "Generating U-Boot image from $2"\nmkimage -A arm -T ramdisk -C none -d "$2" \/boot\/initrd.uimage' rootfs/etc/initramfs/post-update.d/flash-kernel
 
 	#network-manager should ignore wlan1
 	NM_CONF="rootfs/etc/NetworkManager/NetworkManager.conf"
@@ -82,6 +85,10 @@ echo -e "$(cat rootfs/etc/os-release)\n\
 BUILD_ID=$(date)\n\
 VARIANT=\"Debian on C.H.I.P\"\n\
 VARIANT_ID=$(cat rootfs/etc/os-variant)\n" |sudo tee rootfs/etc/os-release
+
+sudo chroot rootfs /bin/bash <<EOF
+	initramfs -u
+EOF
 
 #sudo chown -R $USER:$USER *
 
