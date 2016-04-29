@@ -32,6 +32,15 @@ systemctl mask ModemManager
 systemctl disable hostapd
 systemctl mask hostapd
 plymouth-set-default-theme tribar
+
+sudo sed -i -e 's/#Storage=.*/Storage=volatile/' /etc/systemd/journald.conf
+sed -i -e 's/#SystemMaxUse=.*/SystemMaxUse=10M/' /etc/systemd/journald.conf
+sed -i -e 's/#SystemKeepFree=.*/SystemKeepFree=5M/' /etc/systemd/journald.conf
+sed -i -e 's/#RuntimeMaxUse=.*/RuntimeMaxUse=10M/' /etc/systemd/journald.conf
+sed -i -e 's/#RuntimeKeepFree=.*/RuntimeKeepFree=5M/' /etc/systemd/journald.conf
+
+sed -i '/_initrd="$2"/a echo "Generating U-Boot image from $2"\nmkimage -A arm -T ramdisk -C none -d "$2" \/boot\/initrd.uimage' /etc/initramfs/post-update.d/flash-kernel
+initramfs -u
 EOF
   sync
   sleep 3
@@ -60,13 +69,6 @@ mv -f /etc/rc.local.orig /etc/rc.local\n" |sudo tee rootfs/etc/rc.local >/dev/nu
 
 	#enable root login via ssh
 	sudo sed -i -e 's/PermitRootLogin without-password/PermitRootLogin yes/' rootfs/etc/ssh/sshd_config
-	sudo sed -i -e 's/#Storage=.*/Storage=volatile/' rootfs/etc/systemd/journald.conf
-	sudo sed -i -e 's/#SystemMaxUse=.*/SystemMaxUse=10M/' rootfs/etc/systemd/journald.conf
-	sudo sed -i -e 's/#SystemKeepFree=.*/SystemKeepFree=5M/' rootfs/etc/systemd/journald.conf
-	sudo sed -i -e 's/#RuntimeMaxUse=.*/RuntimeMaxUse=10M/' rootfs/etc/systemd/journald.conf
-	sudo sed -i -e 's/#RuntimeKeepFree=.*/RuntimeKeepFree=5M/' rootfs/etc/systemd/journald.conf
-	
-	sudo sed -i '/_initrd="$2"/a echo "Generating U-Boot image from $2"\nmkimage -A arm -T ramdisk -C none -d "$2" \/boot\/initrd.uimage' rootfs/etc/initramfs/post-update.d/flash-kernel
 
 	#network-manager should ignore wlan1
 	NM_CONF="rootfs/etc/NetworkManager/NetworkManager.conf"
@@ -85,10 +87,6 @@ echo -e "$(cat rootfs/etc/os-release)\n\
 BUILD_ID=$(date)\n\
 VARIANT=\"Debian on C.H.I.P\"\n\
 VARIANT_ID=$(cat rootfs/etc/os-variant)\n" |sudo tee rootfs/etc/os-release
-
-sudo chroot rootfs /bin/bash <<EOF
-	initramfs -u
-EOF
 
 #sudo chown -R $USER:$USER *
 
