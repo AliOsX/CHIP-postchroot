@@ -40,7 +40,6 @@ sed -i -e 's/#SystemKeepFree=.*/SystemKeepFree=5M/' /etc/systemd/journald.conf
 sed -i -e 's/#RuntimeMaxUse=.*/RuntimeMaxUse=10M/' /etc/systemd/journald.conf
 sed -i -e 's/#RuntimeKeepFree=.*/RuntimeKeepFree=5M/' /etc/systemd/journald.conf
 
-sed -i '/_initrd="$2"/a echo "Generating U-Boot image from $2"\nmkimage -A arm -T ramdisk -C none -d "$2" \/boot\/initrd.uimage' /etc/initramfs/post-update.d/flash-kernel
 update-initramfs -u
 EOF
   sync
