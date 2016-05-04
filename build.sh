@@ -6,6 +6,7 @@ function build_debian_post_chroot {
 	sudo mount -t sysfs	chsys	rootfs/sys
 
 	sudo chroot rootfs /bin/bash <<EOF
+set -x
 echo -e "chip\nchip\n\n\n\n\n\nY\n" | adduser chip
 adduser chip sudo 
 adduser chip i2c
