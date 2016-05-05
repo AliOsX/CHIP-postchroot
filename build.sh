@@ -32,7 +32,7 @@ systemctl disable ModemManager
 systemctl mask ModemManager
 systemctl disable hostapd
 systemctl mask hostapd
-plymouth-set-default-theme spinner
+plymouth-set-default-theme pkc-theme
 
 sudo sed -i -e 's/#Storage=.*/Storage=volatile/' /etc/systemd/journald.conf
 sed -i -e 's/#SystemMaxUse=.*/SystemMaxUse=10M/' /etc/systemd/journald.conf
