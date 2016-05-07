@@ -11,6 +11,17 @@ echo -e "chip\nchip\n\n\n\n\n\nY\n" | adduser chip
 adduser chip sudo 
 adduser chip i2c
 
+sudo apt-get install -y --allow-unauthenticated xmlstarlet
+
+#battery-warning poweroff fix
+xmlstarlet ed -u\
+ "/*/action[@id='org.freedesktop.login1.power-off']/defaults/allow_any"\
+  -v "yes"\
+ /usr/share/polkit-1/actions/org.freedesktop.login1.policy >\
+ /usr/share/polkit-1/actions/org.freedesktop.login1.policy
+
+sudo apt-get purge -y xmlstarlet
+
 ##hacks for pocketchip gtk file dialog size
 mkdir -p /home/chip/.config
 cp -R /etc/skel/.config/gtk-2.0 /home/chip/.config/
