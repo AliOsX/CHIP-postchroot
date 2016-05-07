@@ -83,6 +83,8 @@ mv -f /etc/rc.local.orig /etc/rc.local\n" |sudo tee rootfs/etc/rc.local >/dev/nu
 
   echo -e "Debian on C.H.I.P ${BRANCH} build ${BUILD} rev ${GITHASH}\n" |sudo tee rootfs/etc/chip_build_info.txt
 
+  ls -l /usr/share/polkit-1/actions/*
+
 echo -e "$(cat rootfs/etc/os-release)\n\
 BUILD_ID=$(date)\n\
 VARIANT=\"Debian on C.H.I.P\"\n\
