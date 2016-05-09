@@ -14,10 +14,20 @@ adduser chip i2c
 sudo apt-get install -y --allow-unauthenticated xmlstarlet
 
 #battery-warning poweroff fix
+cat /usr/share/polkit-1/actions/org.freedesktop.login1.policy
+
+xmlstarlet ed -u\
+ "/*/action[@id='org.freedesktop.login1.power-off']/defaults/allow_any"\
+  -v "yes"\
+ /usr/share/polkit-1/actions/org.freedesktop.login1.policy
+
 xmlstarlet ed -u\
  "/*/action[@id='org.freedesktop.login1.power-off']/defaults/allow_any"\
   -v "yes"\
  /usr/share/polkit-1/actions/org.freedesktop.login1.policy >\
+ /usr/share/polkit-1/actions/org.freedesktop.login1.policy.new
+
+mv /usr/share/polkit-1/actions/org.freedesktop.login1.policy.new\
  /usr/share/polkit-1/actions/org.freedesktop.login1.policy
 
 sudo apt-get purge -y xmlstarlet
