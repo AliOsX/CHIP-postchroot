@@ -51,6 +51,12 @@ mv -f /etc/rc.local.orig /etc/rc.local\n" |sudo tee rootfs/etc/rc.local >/dev/nu
 	grep -q '^\[keyfile\]' "${NM_CONF}" || \
     echo -e "$(cat ${NM_CONF})\n\n[keyfile]\nunmanaged-devices=interface-name:wlan1" |sudo tee ${NM_CONF}
 
+	#network-manager default to link-local on usb0 cdc_ethernet
+	sudo mkdir -p rootfs/etc/NetworkManager/system-connections/
+	sudo cp usb0_linklocal rootfs/etc/NetworkManager/system-connections/
+	sudo chmod 755 rootfs/etc/NetworkManager/system-connections
+	sudo chmod 600 rootfs/etc/NetworkManager/system-connections/usb0_linklocal
+
   #hack to set back kernel/printk level to 4 after wifi modules have been loaded:
   sudo sed -i -e '/ExecStart=.*/ aExecStartPost=/bin/bash -c "/bin/echo 4 >/proc/sys/kernel/printk"' rootfs/lib/systemd/system/wpa_supplicant.service
 
