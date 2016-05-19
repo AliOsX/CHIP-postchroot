@@ -2,6 +2,23 @@
 
 set -ex
 
+NM_USB0_LINKLOCAL_CONNECTION=$(cat<<EOF
+[connection]
+id=usb0_linklocal
+uuid=3c8ee1db-c6b3-4db6-8bfc-4e94e72cab17
+interface-name=usb0
+type=ethernet
+
+[ipv6]
+method=link-local
+never-default=true
+
+[ipv4]
+method=link-local
+never-default=true
+EOF
+)
+
 function build_debian_post_chroot {
 
 	sudo mount -t proc	chproc	rootfs/proc
@@ -53,7 +70,8 @@ mv -f /etc/rc.local.orig /etc/rc.local\n" |sudo tee rootfs/etc/rc.local >/dev/nu
 
 	#network-manager default to link-local on usb0 cdc_ethernet
 	sudo mkdir -p rootfs/etc/NetworkManager/system-connections/
-	sudo cp usb0_linklocal rootfs/etc/NetworkManager/system-connections/
+	sudo echo ${NM_USB0_LINKLOCAL_CONNECTION} > \
+		rootfs/etc/NetworkManager/system-connections/usb0_linklocal
 	sudo chmod 755 rootfs/etc/NetworkManager/system-connections
 	sudo chmod 600 rootfs/etc/NetworkManager/system-connections/usb0_linklocal
 
