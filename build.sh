@@ -70,8 +70,8 @@ mv -f /etc/rc.local.orig /etc/rc.local\n" |sudo tee rootfs/etc/rc.local >/dev/nu
 
 	#network-manager default to link-local on usb0 cdc_ethernet
 	sudo mkdir -p rootfs/etc/NetworkManager/system-connections/
-	sudo echo ${NM_USB0_LINKLOCAL_CONNECTION} > \
-		rootfs/etc/NetworkManager/system-connections/usb0_linklocal
+	echo "${NM_USB0_LINKLOCAL_CONNECTION}" \
+		| sudo tee rootfs/etc/NetworkManager/system-connections/usb0_linklocal &> /dev/null
 	sudo chmod 755 rootfs/etc/NetworkManager/system-connections
 	sudo chmod 600 rootfs/etc/NetworkManager/system-connections/usb0_linklocal
 
