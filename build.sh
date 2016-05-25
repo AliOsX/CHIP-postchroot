@@ -1,5 +1,24 @@
 #!/bin/bash
 
+set -ex
+
+NM_USB0_LINKLOCAL_CONNECTION=$(cat<<EOF
+[connection]
+id=usb0_linklocal
+uuid=3c8ee1db-c6b3-4db6-8bfc-4e94e72cab17
+interface-name=usb0
+type=ethernet
+
+[ipv6]
+method=link-local
+never-default=true
+
+[ipv4]
+method=link-local
+never-default=true
+EOF
+)
+
 function build_debian_post_chroot {
 
 	sudo mount -t proc	chproc	rootfs/proc
@@ -9,15 +28,6 @@ function build_debian_post_chroot {
 echo -e "chip\nchip\n\n\n\n\n\nY\n" | adduser chip
 adduser chip sudo 
 adduser chip i2c
-
-##hacks for pocketchip gtk file dialog size
-mkdir -p /home/chip/.config
-cp -R /etc/skel/.config/gtk-2.0 /home/chip/.config/
-chown -R root:root /home/chip/.config/gtk-2.0
-chmod 655 /home/chip/.config/gtk-2.0
-chmod 644 /home/chip/.config/gtk-2.0/*
-##endhacks
-
 
 apt-get clean
 apt-get autoclean
@@ -58,6 +68,13 @@ mv -f /etc/rc.local.orig /etc/rc.local\n" |sudo tee rootfs/etc/rc.local >/dev/nu
 	NM_CONF="rootfs/etc/NetworkManager/NetworkManager.conf"
 	grep -q '^\[keyfile\]' "${NM_CONF}" || \
     echo -e "$(cat ${NM_CONF})\n\n[keyfile]\nunmanaged-devices=interface-name:wlan1" |sudo tee ${NM_CONF}
+
+	#network-manager default to link-local on usb0 cdc_ethernet
+	sudo mkdir -p rootfs/etc/NetworkManager/system-connections/
+	echo "${NM_USB0_LINKLOCAL_CONNECTION}" \
+		| sudo tee rootfs/etc/NetworkManager/system-connections/usb0_linklocal &> /dev/null
+	sudo chmod 755 rootfs/etc/NetworkManager/system-connections
+	sudo chmod 600 rootfs/etc/NetworkManager/system-connections/usb0_linklocal
 
   #hack to set back kernel/printk level to 4 after wifi modules have been loaded:
   sudo sed -i -e '/ExecStart=.*/ aExecStartPost=/bin/bash -c "/bin/echo 4 >/proc/sys/kernel/printk"' rootfs/lib/systemd/system/wpa_supplicant.service
