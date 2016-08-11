@@ -77,7 +77,7 @@ mv -f /etc/rc.local.orig /etc/rc.local\n" |sudo tee rootfs/etc/rc.local >/dev/nu
 	sudo chmod 600 rootfs/etc/NetworkManager/system-connections/usb0_linklocal
 
   #hack to set back kernel/printk level to 4 after wifi modules have been loaded:
-  sudo sed -i -e '/ExecStart=.*/ aExecStartPost=/bin/bash -c "/bin/echo 4 >/proc/sys/kernel/printk"' rootfs/lib/systemd/system/wpa_supplicant.service
+  sudo sed -i -e '/ExecStart=.*/ aExecStartPost=/bin/bash -c "/bin/echo 7 >/proc/sys/kernel/printk"' rootfs/lib/systemd/system/wpa_supplicant.service
 
   #load g_serial at boot time
   echo -e "$(cat rootfs/etc/modules)\ng_serial" | sudo tee rootfs/etc/modules
