@@ -25,9 +25,43 @@ function build_debian_post_chroot {
 	sudo mount -t sysfs	chsys	rootfs/sys
 
 	sudo chroot rootfs /bin/bash <<EOF
+set -x
 echo -e "chip\nchip\n\n\n\n\n\nY\n" | adduser chip
 adduser chip sudo 
 adduser chip i2c
+
+export BRANCH
+
+if [[ "$BRANCH" == "pocketchip" ]]; then
+sudo apt-get install -y --allow-unauthenticated xmlstarlet
+
+#battery-warning poweroff fix
+cat /usr/share/polkit-1/actions/org.freedesktop.login1.policy
+
+xmlstarlet ed -u\
+ "/*/action[@id='org.freedesktop.login1.power-off']/defaults/allow_any"\
+  -v "yes"\
+ /usr/share/polkit-1/actions/org.freedesktop.login1.policy
+
+xmlstarlet ed -u\
+ "/*/action[@id='org.freedesktop.login1.power-off']/defaults/allow_any"\
+  -v "yes"\
+ /usr/share/polkit-1/actions/org.freedesktop.login1.policy >\
+ /usr/share/polkit-1/actions/org.freedesktop.login1.policy.new
+
+mv /usr/share/polkit-1/actions/org.freedesktop.login1.policy.new\
+ /usr/share/polkit-1/actions/org.freedesktop.login1.policy
+
+sudo apt-get purge -y xmlstarlet
+
+##hacks for pocketchip gtk file dialog size
+mkdir -p /home/chip/.config
+cp -R /etc/skel/.config/gtk-2.0 /home/chip/.config/
+chown -R root:root /home/chip/.config/gtk-2.0
+chmod 655 /home/chip/.config/gtk-2.0
+chmod 644 /home/chip/.config/gtk-2.0/*
+##endhacks
+fi
 
 apt-get clean
 apt-get autoclean
@@ -35,6 +69,25 @@ apt-get autoremove
 
 rm -rf /var/lib/apt/lists/*
 rm -rf /usr/lib/locale/*
+
+if [[ "$BRANCH" == "pocketchip" ]]; then
+systemctl disable systemd-journal-flush
+systemctl mask systemd-journal-flush
+systemctl disable ModemManager
+systemctl mask ModemManager
+systemctl disable hostapd
+systemctl mask hostapd
+
+
+sudo sed -i -e 's/#Storage=.*/Storage=volatile/' /etc/systemd/journald.conf
+sed -i -e 's/#SystemMaxUse=.*/SystemMaxUse=10M/' /etc/systemd/journald.conf
+sed -i -e 's/#SystemKeepFree=.*/SystemKeepFree=5M/' /etc/systemd/journald.conf
+sed -i -e 's/#RuntimeMaxUse=.*/RuntimeMaxUse=10M/' /etc/systemd/journald.conf
+sed -i -e 's/#RuntimeKeepFree=.*/RuntimeKeepFree=5M/' /etc/systemd/journald.conf
+
+update-initramfs -u
+fi
+
 EOF
   sync
   sleep 3
