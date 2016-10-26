@@ -150,7 +150,7 @@ VARIANT_ID=$(cat rootfs/etc/os-variant)\n" |sudo tee rootfs/etc/os-release
 #sudo rm -rf rootfs/sys/*
 
 pushd rootfs
-sudo tar -zcf ../postchroot-rootfs.tar.gz .
+sudo tar -cf ../postchroot-rootfs.tar.gz .
 }
 
 build_debian_post_chroot || exit $?
