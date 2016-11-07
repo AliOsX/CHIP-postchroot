@@ -102,6 +102,7 @@ EOF
   sudo rm rootfs/usr/bin/qemu-arm-static
 
 	#  hack to generate ssh host keys on first boot
+	#  also finish install of hanging packages [blueman]
 	if [[ ! -e rootfs/etc/rc.local.orig ]]; then sudo mv rootfs/etc/rc.local rootfs/etc/rc.local.orig; fi
 	echo -e "#!/bin/sh\n\n\
 rm -f /etc/ssh/ssh_host_*\n\
@@ -111,6 +112,8 @@ rm -f /etc/ssh/ssh_host_*\n\
 /usr/bin/ssh-keygen -t ecdsa -N '' -f /etc/ssh/ssh_host_ecdsa_key\n\
 /usr/bin/ssh-keygen -t ed25519 -N '' -f /etc/ssh/ssh_host_ed25519_key\n\
 systemctl restart ssh\n\
+\n\
+apt-get -f install\n\
 mv -f /etc/rc.local.orig /etc/rc.local\n" |sudo tee rootfs/etc/rc.local >/dev/null
 	sudo chmod a+x rootfs/etc/rc.local
 
