@@ -51,7 +51,6 @@ xmlstarlet ed -u\
 
 mv /usr/share/polkit-1/actions/org.freedesktop.login1.policy.new\
  /usr/share/polkit-1/actions/org.freedesktop.login1.policy
-
 sudo apt-get purge -y xmlstarlet
 
 ##hacks for pocketchip gtk file dialog size
@@ -105,6 +104,17 @@ EOF
 	#  also finish install of hanging packages [blueman]
 	if [[ ! -e rootfs/etc/rc.local.orig ]]; then sudo mv rootfs/etc/rc.local rootfs/etc/rc.local.orig; fi
 	echo -e "#!/bin/sh\n\n\
+if [[ -f /etc/ssh_host_rsa_key ]] &&\n\
+   [[ -f /etc/ssh_host_dsa_key ]] &&\n\
+   [[ -f /etc/ssh_host_key ]] &&\n\
+   [[ -f /etc/ssh_host_ecdsa_key ]] &&\n\
+   [[ -f /etc/ssh_host_ed25519_key ]]; then\n\
+\n\
+mv -f /etc/rc.local.orig /etc/rc.local\n" |sudo tee rootfs/etc/rc.local >/dev/null\n\
+exit 0\n\
+\n\
+fi\n\
+\n\
 rm -f /etc/ssh/ssh_host_*\n\
 /usr/bin/ssh-keygen -t rsa -N '' -f /etc/ssh/ssh_host_rsa_key\n\
 /usr/bin/ssh-keygen -t dsa -N '' -f /etc/ssh/ssh_host_dsa_key\n\
@@ -115,7 +125,8 @@ systemctl restart ssh\n\
 \n\
 apt-get -f install\n\
 sync\n\
-mv -f /etc/rc.local.orig /etc/rc.local\n" |sudo tee rootfs/etc/rc.local >/dev/null
+" |sudo tee rootfs/etc/rc.local >/dev/null
+
 	sudo chmod a+x rootfs/etc/rc.local
 
 	#enable root login via ssh
