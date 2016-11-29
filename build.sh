@@ -152,10 +152,10 @@ sync\n\
 
   echo -e "Debian on C.H.I.P ${BRANCH} build ${BUILD} rev ${GITHASH}\n" |sudo tee rootfs/etc/chip_build_info.txt
 
-echo -e "$(cat rootfs/etc/os-release)\n\
-BUILD_ID=$(date)\n\
-VARIANT=\"Debian on C.H.I.P\"\n\
-VARIANT_ID=$(cat rootfs/etc/os-variant)\n" |sudo tee rootfs/etc/os-release
+#echo -e "$(cat rootfs/etc/os-release)\n\
+#BUILD_ID=$(date)\n\
+#VARIANT=\"Debian on C.H.I.P\"\n\
+#VARIANT_ID=$(cat rootfs/etc/os-variant)\n" |sudo tee rootfs/etc/os-release
 
 #sudo chown -R $USER:$USER *
 
