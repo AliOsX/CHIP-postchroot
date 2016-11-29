@@ -110,7 +110,7 @@ if [[ -f /etc/ssh_host_rsa_key ]] &&\n\
    [[ -f /etc/ssh_host_ecdsa_key ]] &&\n\
    [[ -f /etc/ssh_host_ed25519_key ]]; then\n\
 \n\
-mv -f /etc/rc.local.orig /etc/rc.local\n" |sudo tee rootfs/etc/rc.local >/dev/null\n\
+mv -f /etc/rc.local.orig /etc/rc.local\n\
 exit 0\n\
 \n\
 fi\n\
@@ -152,10 +152,10 @@ sync\n\
 
   echo -e "Debian on C.H.I.P ${BRANCH} build ${BUILD} rev ${GITHASH}\n" |sudo tee rootfs/etc/chip_build_info.txt
 
-#echo -e "$(cat rootfs/etc/os-release)\n\
-#BUILD_ID=$(date)\n\
-#VARIANT=\"Debian on C.H.I.P\"\n\
-#VARIANT_ID=$(cat rootfs/etc/os-variant)\n" |sudo tee rootfs/etc/os-release
+  echo -e "$(cat rootfs/etc/os-release)\n\
+  BUILD_ID=$(date)\n\
+  VARIANT=\"Debian on C.H.I.P\"\n\
+  VARIANT_ID=$(cat rootfs/etc/os-variant)\n" |sudo tee rootfs/etc/os-release
 
 #sudo chown -R $USER:$USER *
 
