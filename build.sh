@@ -78,7 +78,7 @@ systemctl disable hostapd
 systemctl mask hostapd
 
 
-sudo sed -i -e 's/#Storage=.*/Storage=volatile/' /etc/systemd/journald.conf
+sed -i -e 's/#Storage=.*/Storage=volatile/' /etc/systemd/journald.conf
 sed -i -e 's/#SystemMaxUse=.*/SystemMaxUse=10M/' /etc/systemd/journald.conf
 sed -i -e 's/#SystemKeepFree=.*/SystemKeepFree=5M/' /etc/systemd/journald.conf
 sed -i -e 's/#RuntimeMaxUse=.*/RuntimeMaxUse=10M/' /etc/systemd/journald.conf
@@ -91,8 +91,6 @@ EOF
   sync
   sleep 3
 
-#  sudo umount -l rootfs/dev/pts
-#  sudo umount -l rootfs/dev
   sudo umount -l rootfs/proc
   sudo umount -l rootfs/sys
 
@@ -104,11 +102,11 @@ EOF
 	#  also finish install of hanging packages [blueman]
 	if [[ ! -e rootfs/etc/rc.local.orig ]]; then sudo mv rootfs/etc/rc.local rootfs/etc/rc.local.orig; fi
 	echo -e "#!/bin/sh\n\n\
-if [[ -f /etc/ssh_host_rsa_key ]] &&\n\
-   [[ -f /etc/ssh_host_dsa_key ]] &&\n\
-   [[ -f /etc/ssh_host_key ]] &&\n\
-   [[ -f /etc/ssh_host_ecdsa_key ]] &&\n\
-   [[ -f /etc/ssh_host_ed25519_key ]]; then\n\
+if [[ -f /etc/ssh/ssh_host_rsa_key ]] &&\n\
+   [[ -f /etc/ssh/ssh_host_dsa_key ]] &&\n\
+   [[ -f /etc/ssh/ssh_host_key ]] &&\n\
+   [[ -f /etc/ssh/ssh_host_ecdsa_key ]] &&\n\
+   [[ -f /etc/ssh/ssh_host_ed25519_key ]]; then\n\
 \n\
 mv -f /etc/rc.local.orig /etc/rc.local\n\
 exit 0\n\
@@ -156,13 +154,6 @@ sync\n\
   BUILD_ID=$(date)\n\
   VARIANT=\"Debian on C.H.I.P\"\n\
   VARIANT_ID=$(cat rootfs/etc/os-variant)\n" |sudo tee rootfs/etc/os-release
-
-#sudo chown -R $USER:$USER *
-
-#sudo rm -rf rootfs/proc/*
-#sudo rm -rf rootfs/dev/*
-#sudo rm -rf rootfs/run/*
-#sudo rm -rf rootfs/sys/*
 
 pushd rootfs
 sudo tar -cf ../postchroot-rootfs.tar.gz .
