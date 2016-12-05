@@ -146,7 +146,7 @@ sync\n\
   sudo sed -i -e '/ExecStart=.*/ aExecStartPost=/bin/bash -c "/bin/echo 4 >/proc/sys/kernel/printk"' rootfs/lib/systemd/system/wpa_supplicant.service
 
   #load g_serial at boot time
-  echo -e "$(cat rootfs/etc/modules)\ng_serial" | sudo tee rootfs/etc/modules
+  #echo -e "$(cat rootfs/etc/modules)\ng_serial" | sudo tee rootfs/etc/modules
 
   echo -e "Debian on C.H.I.P ${BRANCH} build ${BUILD} rev ${GITHASH}\n" |sudo tee rootfs/etc/chip_build_info.txt
 
